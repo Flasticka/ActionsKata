@@ -1,34 +1,47 @@
 name: Action CI
 
-on: ["pull_request"]
+on: 
+  pull_request:
 
 jobs:
   welcome:
     runs-on: ubuntu-latest
-
     steps:
-        run: echo Hello world
+      - name: Welcome Step
+        run: echo "Hello world"
+
   build:
     runs-on: ubuntu-latest
     steps:
-       uses: actions/checkout@v4
-       uses: actions/setup-dotnet@v4
-       with:
-        dotnet-version: '8.0.3'
-       run: dotnet build
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.3'
+      - name: Build
+        run: dotnet build
+
   test:
     runs-on: ubuntu-latest
     steps:
-       uses: actions/checkout@v4
-       uses: actions/setup-dotnet@v4
-       with:
-        dotnet-version: '8.0.3'
-       run: dotnet test
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.3'
+      - name: Test
+        run: dotnet test
+
   publish:
     runs-on: ubuntu-latest
     steps:
-       uses: actions/checkout@v4
-       uses: actions/setup-dotnet@v4
-       with:
-        dotnet-version: '8.0.3'
-       run: dotnet publish
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.3'
+      - name: Publish
+        run: dotnet publish
