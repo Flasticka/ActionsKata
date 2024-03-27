@@ -9,45 +9,6 @@ jobs:
     steps:
       - name: Welcome Step
         run: echo "Hello world"
-
-  build:
-    runs-on: ubuntu-latest
-    needs: welcome
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: "3.1.x"
-      - name: Build
-        run: dotnet build
-
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: "3.1.x"
-      - name: Test
-        run: dotnet test
-
-  publish:
-    runs-on: ubuntu-latest
-    needs: [test, sonar_cloud]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: "3.1.x"
-      - name: Publish
-        run: dotnet publish
   sonar_cloud:
     needs: welcome
     runs-on: windows-latest
@@ -88,3 +49,41 @@ jobs:
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"Flasticka_ActionsKata" /o:"flasticka" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
           dotnet clean
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+  build:
+    runs-on: ubuntu-latest
+    needs: welcome
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "3.1.x"
+      - name: Build
+        run: dotnet build
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "3.1.x"
+      - name: Test
+        run: dotnet test
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: [test, sonar_cloud]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "3.1.x"
+      - name: Publish
+        run: dotnet publish
